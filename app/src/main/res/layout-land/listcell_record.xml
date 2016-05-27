@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <com.pk.purse.widget.SquareTextView
+    <TextView
         android:id="@+id/cell_itemname"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="?attr/actionBarSize"
         android:gravity="center"
         android:textAllCaps="true"
         android:textStyle="bold"

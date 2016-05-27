@@ -25,11 +25,11 @@ public class Record {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         StringBuilder space = new StringBuilder(" ");
-        stringBuilder.append(item.getName());
+        stringBuilder.append(item.name);
         stringBuilder.append(space);
-        stringBuilder.append(item.getPrice());
+        stringBuilder.append(item.price);
         stringBuilder.append(space);
-        stringBuilder.append(item.getQuantity());
+        stringBuilder.append(item.quantity);
         stringBuilder.append(space);
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         stringBuilder.append(dateFormat.format(time));

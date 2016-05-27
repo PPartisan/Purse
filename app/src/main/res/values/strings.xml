@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">Purse</string>
+
+    <!-- MainMenuActivity -->
+    <string name="mma_your_purse">Your Purse: %1$s</string>
+
 </resources>

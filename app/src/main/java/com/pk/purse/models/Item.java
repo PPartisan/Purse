@@ -1,24 +1,22 @@
 package com.pk.purse.models;
 
+import java.math.BigDecimal;
+
 public class Item {
 
-    private String name;
-    private int quantity;
-    private double price;
+    //Immutable
+    public final String name;
+    public final int quantity;
+    public final BigDecimal price;
 
-    public Item(String name, double price, int quantity) {
+    public Item(String name, String price, int quantity) {
+        this(name, new BigDecimal(price), quantity);
+    }
+
+    public Item(String name, BigDecimal price, int quantity) {
         this.name = name;
         this.price = price;
         this.quantity = quantity;
     }
 
-    public String getName() { return name; }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public double getPrice() {
-        return price;
-    }
 }

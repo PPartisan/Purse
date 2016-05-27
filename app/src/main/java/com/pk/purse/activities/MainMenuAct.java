@@ -8,74 +8,85 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.pk.purse.R;
+import com.pk.purse.adapter.AdapterCellManager;
+import com.pk.purse.adapter.RecordAdapter;
+import com.pk.purse.events.RecordAdapterClickEvent;
 import com.pk.purse.models.Item;
 import com.pk.purse.models.MoneyRecorder;
 import com.pk.purse.models.Record;
+import com.pk.purse.utils.ConfigUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.text.NumberFormat;
 import java.text.ParsePosition;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Currency;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.StringTokenizer;
 
 public class MainMenuAct extends AppCompatActivity {
 
-    private TextView addIncomeTextView;
-    private TextView addOutcomeTextView;
-    private TextView setWishItemTextView;
-    private TextView showRecordsTextView;
+    private AdapterCellManager adapterCellManager;
+
     private TextView savedMoneyTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_menu);
-        readSavedMoney();
-        readRecords();
-        init();
+
+        adapterCellManager = new AdapterCellManager(this);
+
+        savedMoneyTextView = (TextView) findViewById(R.id.savedmoney_tv);
+        savedMoneyTextView.setText(savedMoneyText());
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.menu_rv);
+
+        if (recyclerView != null) {
+            recyclerView.setAdapter(new RecordAdapter(adapterCellManager));
+            recyclerView.setLayoutManager(new GridLayoutManager(this, 2));
+            recyclerView.setHasFixedSize(true);
+        }
+
     }
 
-    private void init() {
-        addIncomeTextView = (TextView) findViewById(R.id.textview_addIncome);
-        addOutcomeTextView = (TextView) findViewById(R.id.textview_addOutcome);
-        setWishItemTextView = (TextView) findViewById(R.id.textview_addWishitem);
-        showRecordsTextView = (TextView) findViewById(R.id.textview_showRecords);
-        savedMoneyTextView = (TextView) findViewById(R.id.textview_savedmoney);
-        savedMoneyTextView.setText("Your purse: "+String.valueOf(MoneyRecorder.getInstance().getSavedMoney()));
+    @Override
+    protected void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
 
-        addIncomeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createAddIncomeDialog().show();
-            }
-        });
-        addOutcomeTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createAddOutcomeDialog().show();
-            }
-        });
-        setWishItemTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createSetWishedItemDialog().show();
-            }
-        });
-        showRecordsTextView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainMenuAct.this, ShowAllRecordsAct.class);
-                startActivity(intent);
-            }
-        });
+    @Override
+    protected void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe
+    public void onEvent(RecordAdapterClickEvent event) {
+        adapterCellManager.getAdapterCells().get(event.position).onClick();
+    }
+
+    private String savedMoneyText() {
+        final double savedMoney = MoneyRecorder.getInstance().getSavedMoney().doubleValue();
+        final String currencySymbol = Currency.getInstance(Locale.getDefault()).getSymbol();
+        Log.e(getClass().getSimpleName(), "Value: " + (currencySymbol + String.valueOf(savedMoney)));
+        return getString(R.string.mma_your_purse, (currencySymbol + NumberFormat.getInstance().format(savedMoney)));
     }
 
     private void readRecords() {
@@ -100,14 +111,19 @@ public class MainMenuAct extends AppCompatActivity {
             for(String s: recordsArray) {
                 String[] recordArray = s.split(" ",4);
                 String itemName = recordArray[0];
-                double price = Double.parseDouble(recordArray[1]);
-                int quantity = Integer.parseInt(recordArray[2]);
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                Date time = simpleDateFormat.parse(recordArray[3], new ParsePosition(0));
+                try {
+                    double price = Double.parseDouble(recordArray[1]);
+                    int quantity = Integer.parseInt(recordArray[2]);
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    Date time = simpleDateFormat.parse(recordArray[3], new ParsePosition(0));
 //                Date time = Date.valueOf(recordArray[3]);
-                Item item = new Item(itemName, price, quantity);
-                Record record = new Record(item, time);
-                records.add(record);
+                    Item item = new Item(itemName, String.valueOf(price), quantity);
+                    Record record = new Record(item, time);
+                    records.add(record);
+                }catch (NumberFormatException e) {
+                    Log.e(getClass().getSimpleName(), "NFE");
+
+                }
             }
         }
         MoneyRecorder.getInstance().setRecords(records);
@@ -185,7 +201,7 @@ public class MainMenuAct extends AppCompatActivity {
                         String name = itemName.getText().toString();
                         int quantity = Integer.parseInt(itemQuantity.getText().toString());
                         double price = Double.parseDouble(pricePerItem.getText().toString());
-                        Item item = new Item(name, price, quantity);
+                        Item item = new Item(name, String.valueOf(price), quantity);
                         Record record = new Record(item);
                         MoneyRecorder mr = MoneyRecorder.getInstance();
                         mr.addRecord(record);
@@ -227,4 +243,7 @@ public class MainMenuAct extends AppCompatActivity {
 
         return builder.create();
     }
+
+
+
 }
