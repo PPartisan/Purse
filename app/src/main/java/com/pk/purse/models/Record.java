@@ -1,5 +1,7 @@
 package com.pk.purse.models;
 
+import com.pk.purse.adapter.RecordAdapter;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -8,8 +10,11 @@ public class Record {
     private Date time;
 
     public Record(Item item) {
-        this.item = item;
-        time = new Date(System.currentTimeMillis());
+        this(item, new Date(System.currentTimeMillis()));
+    }
+
+    public Record(String name, String price, int quantity) {
+        this(new Item(name, price, quantity));
     }
 
     public Record(Item item, Date time) {

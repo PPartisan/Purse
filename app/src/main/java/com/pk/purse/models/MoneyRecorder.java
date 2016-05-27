@@ -8,16 +8,10 @@ public class MoneyRecorder {
 
     private List<Record> records;
     private BigDecimal savedMoney;
-    private static MoneyRecorder instance;
 
-    private MoneyRecorder() {
+    public MoneyRecorder() {
         records = new ArrayList<>();
-        savedMoney = new BigDecimal("0.00");
-    }
-
-    public static MoneyRecorder getInstance() {
-        if(instance == null) instance = new MoneyRecorder();
-        return instance;
+        savedMoney = new BigDecimal("9.7");
     }
 
     public void addRecord(Record record) { records.add(record); }

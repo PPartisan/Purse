@@ -11,9 +11,8 @@ public class Plan {
         this(BigDecimal.valueOf(moneyUsedPerDay), daysUntilPurchasable);
     }
 
-    public static Plan createPlan(Item item, int days) {
+    public static Plan createPlan(MoneyRecorder recorder, Item item, int days) {
         BigDecimal totalPrice = item.price.multiply(BigDecimal.valueOf(item.quantity));
-        MoneyRecorder recorder = MoneyRecorder.getInstance();
         BigDecimal savedMoney = recorder.getSavedMoney();
         BigDecimal savedPerDay = (
                 totalPrice.subtract(savedMoney)).divide(BigDecimal.valueOf(days),
