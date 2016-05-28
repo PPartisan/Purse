@@ -9,6 +9,7 @@ import com.pk.purse.adapter.IOManager;
 import com.pk.purse.events.UpdatePurseEvent;
 import com.pk.purse.models.MoneyRecorder;
 import com.pk.purse.models.Record;
+import com.pk.purse.models.item.OutgoingItem;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -56,17 +57,11 @@ public class OutgoingsDialog extends AbsAdapterDialog implements DialogInterface
 
         final String name = itemName != null ? itemName.getText().toString() : null;
         final int quantity = Integer.parseInt(itemQuantity != null ? itemQuantity.getText().toString() : null);
-        final double price = Double.parseDouble(pricePerItem != null ? pricePerItem.getText().toString() : null);
+        final String price = pricePerItem != null ? pricePerItem.getText().toString() : null;
 
-        Record record = new Record(name, String.valueOf(price), quantity);
-        MoneyRecorder mr = ioManager.getFileManager().getMoneyRecorder();
-        mr.addRecord(record);
-        mr.substractMoney(price * quantity);
+        ioManager.update(new OutgoingItem(name, price, quantity));
 
-        ioManager.getFileManager().writeRecords();
-        ioManager.getSharedPreferencesManager().writeSavedMoney(mr.getSavedMoney().toPlainString());
-
-        EventBus.getDefault().post(new UpdatePurseEvent(mr.getSavedMoney()));
+        EventBus.getDefault().post(new UpdatePurseEvent(ioManager.getSavedMoney(IOManager.FILE)));
 
     }
 }

@@ -1,5 +1,7 @@
 package com.pk.purse.models;
 
+import com.pk.purse.models.item.Item;
+
 public class WishItem {
 
     private static Item wishedItem;

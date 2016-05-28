@@ -1,5 +1,8 @@
 package com.pk.purse.models;
 
+import com.pk.purse.models.item.Item;
+import com.pk.purse.models.item.OutgoingItem;
+
 import java.math.BigDecimal;
 
 public class Plan {
@@ -11,8 +14,8 @@ public class Plan {
         this(BigDecimal.valueOf(moneyUsedPerDay), daysUntilPurchasable);
     }
 
-    public static Plan createPlan(MoneyRecorder recorder, Item item, int days) {
-        BigDecimal totalPrice = item.price.multiply(BigDecimal.valueOf(item.quantity));
+    public static Plan createPlan(MoneyRecorder recorder, OutgoingItem item, int days) {
+        BigDecimal totalPrice = item.getPrice().multiply(BigDecimal.valueOf(item.getQuantity()));
         BigDecimal savedMoney = recorder.getSavedMoney();
         BigDecimal savedPerDay = (
                 totalPrice.subtract(savedMoney)).divide(BigDecimal.valueOf(days),

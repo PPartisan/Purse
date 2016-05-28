@@ -1,5 +1,7 @@
 package com.pk.purse.models;
 
+import org.greenrobot.eventbus.util.AsyncExecutor;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,25 +9,34 @@ import java.util.List;
 public class MoneyRecorder {
 
     private List<Record> records;
-    private BigDecimal savedMoney;
+    private BigDecimal savedMoney = null;
 
-    public MoneyRecorder() {
-        records = new ArrayList<>();
-        savedMoney = new BigDecimal("9.7");
+    public MoneyRecorder(List<Record> records) {
+        this.records = records;
     }
 
     public void addRecord(Record record) { records.add(record); }
 
-    public void addMoney(double amount) { savedMoney = savedMoney.add(BigDecimal.valueOf(amount)); }
-
-    public void substractMoney(double amount) { savedMoney = savedMoney.subtract(BigDecimal.valueOf(amount)); }
-
-    public void setMoney(double amount) { savedMoney = BigDecimal.valueOf(amount); }
-
-    public void setRecords(List<Record> records) { this.records = records; }
-
     public List<Record> getRecords() { return records; }
 
-    public BigDecimal getSavedMoney() { return savedMoney; }
+    public BigDecimal getSavedMoney() {
+        /*if (savedMoney == null) {
+
+            savedMoney = new BigDecimal("0");
+
+            for (Record record : records) {
+                savedMoney = record.getItem().operation(savedMoney);
+            }
+
+        }
+        return savedMoney;*/
+        savedMoney = new BigDecimal("0");
+
+        for (Record record : records) {
+            savedMoney = record.getItem().operation(savedMoney);
+        }
+
+        return savedMoney;
+    }
 
 }

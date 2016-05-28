@@ -1,20 +1,20 @@
 package com.pk.purse.models;
 
-import com.pk.purse.adapter.RecordAdapter;
+import com.pk.purse.models.item.Item;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Record {
+
+    public static final String PIPE = "|";
+
     private Item item;
     private Date time;
 
     public Record(Item item) {
         this(item, new Date(System.currentTimeMillis()));
-    }
-
-    public Record(String name, String price, int quantity) {
-        this(new Item(name, price, quantity));
     }
 
     public Record(Item item, Date time) {
@@ -28,17 +28,8 @@ public class Record {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        StringBuilder space = new StringBuilder(" ");
-        stringBuilder.append(item.name);
-        stringBuilder.append(space);
-        stringBuilder.append(item.price);
-        stringBuilder.append(space);
-        stringBuilder.append(item.quantity);
-        stringBuilder.append(space);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        stringBuilder.append(dateFormat.format(time));
-//        stringBuilder.append(time.toString());
-        return stringBuilder.toString();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        return item.getName() + PIPE + item.getPrice() + PIPE +
+                item.getQuantity() + PIPE + dateFormat.format(time);
     }
 }

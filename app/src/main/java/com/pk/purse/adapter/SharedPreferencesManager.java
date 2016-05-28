@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 /**
  * Created by tom on 27/05/16.
  */
-public class SharedPreferencesManager {
+class SharedPreferencesManager {
 
     private static final String SAVED_MONEY_KEY = "saved_money";
 

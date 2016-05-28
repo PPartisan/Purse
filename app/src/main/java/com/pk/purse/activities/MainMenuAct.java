@@ -17,7 +17,6 @@ import com.pk.purse.adapter.IOManager;
 import com.pk.purse.adapter.RecordAdapter;
 import com.pk.purse.events.RecordAdapterClickEvent;
 import com.pk.purse.events.UpdatePurseEvent;
-import com.pk.purse.models.Item;
 import com.pk.purse.models.MoneyRecorder;
 import com.pk.purse.models.Record;
 
@@ -77,7 +76,7 @@ public class MainMenuAct extends AppCompatActivity {
     }
 
     private String savedMoneyText() {
-        final double savedMoney = ioManager.getFileManager().getMoneyRecorder().getSavedMoney().doubleValue();
+        final double savedMoney = ioManager.getSavedMoney(IOManager.PREFS).doubleValue();
         return getString(R.string.mma_your_purse, (NumberFormat.getCurrencyInstance().format(savedMoney)));
     }
 

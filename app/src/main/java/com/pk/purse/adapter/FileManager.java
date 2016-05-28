@@ -1,12 +1,11 @@
 package com.pk.purse.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.pk.purse.models.Item;
 import com.pk.purse.models.MoneyRecorder;
 import com.pk.purse.models.Record;
+import com.pk.purse.models.item.OutgoingItem;
 import com.pk.purse.utils.AppUtils;
 
 import java.io.FileInputStream;
@@ -21,7 +20,7 @@ import java.util.Locale;
 /**
  * Created by tom on 27/05/16.
  */
-public class FileManager {
+class FileManager {
 
     public static final String OUTCOME_RECORDS = "outcomeRecords";
 
@@ -31,14 +30,16 @@ public class FileManager {
 
     public FileManager(Context context) {
         this.context = context;
-        moneyRecorder = new MoneyRecorder();
     }
 
     public MoneyRecorder getMoneyRecorder() {
+        if (moneyRecorder == null) {
+            moneyRecorder = new MoneyRecorder(readRecords());
+        }
         return moneyRecorder;
     }
 
-    public void readRecords() {
+    public List<Record> readRecords() {
 
         List<Record> records = new ArrayList<>();
         StringBuilder stringBuilder = new StringBuilder();
@@ -61,14 +62,14 @@ public class FileManager {
         if(stringBuilder.length() > 0 ) {
             String[] recordsArray = stringBuilder.toString().split(AppUtils.lineSeparator());
             for(String s: recordsArray) {
-                String[] recordArray = s.split("\\s",4);
+                String[] recordArray = s.split(Record.PIPE,4);
                 String itemName = recordArray[0];
                 try {
                     double price = Double.parseDouble(recordArray[1]);
                     int quantity = Integer.parseInt(recordArray[2]);
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
                     Date time = simpleDateFormat.parse(recordArray[3], new ParsePosition(0));
-                    Item item = new Item(itemName, String.valueOf(price), quantity);
+                    OutgoingItem item = new OutgoingItem(itemName, String.valueOf(price), quantity);
                     Record record = new Record(item, time);
                     records.add(record);
                 }catch (NumberFormatException e) {
@@ -77,7 +78,7 @@ public class FileManager {
             }
         }
 
-        moneyRecorder.setRecords(records);
+        return records;
 
     }
 

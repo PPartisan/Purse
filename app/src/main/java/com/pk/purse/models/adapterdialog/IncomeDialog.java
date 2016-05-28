@@ -9,8 +9,11 @@ import com.pk.purse.adapter.IOManager;
 import com.pk.purse.events.UpdatePurseEvent;
 import com.pk.purse.models.MoneyRecorder;
 import com.pk.purse.models.Record;
+import com.pk.purse.models.item.IncomeItem;
 
 import org.greenrobot.eventbus.EventBus;
+
+import java.math.BigDecimal;
 
 /**
  * Created by tom on 27/05/16.
@@ -49,12 +52,9 @@ public class IncomeDialog extends AbsAdapterDialog implements DialogInterface.On
 
         EditText incomeAmount = (EditText) alert.findViewById(R.id.edittext_incomeamount);
 
-        MoneyRecorder mr = ioManager.getFileManager().getMoneyRecorder();
+        ioManager.update(new IncomeItem(new BigDecimal(incomeAmount.getText().toString())));
 
-        mr.addMoney(Double.parseDouble(incomeAmount.getText().toString()));
-        ioManager.getSharedPreferencesManager().writeSavedMoney(mr.getSavedMoney().toPlainString());
-
-        EventBus.getDefault().post(new UpdatePurseEvent(mr.getSavedMoney()));
+        EventBus.getDefault().post(new UpdatePurseEvent(ioManager.getSavedMoney(IOManager.FILE)));
 
     }
 }
