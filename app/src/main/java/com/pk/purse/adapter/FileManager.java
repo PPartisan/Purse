@@ -57,7 +57,7 @@ class FileManager {
             e.printStackTrace();
         }
 
-        Log.e("readRecord", stringBuilder.toString());
+        //Log.e("readRecord", stringBuilder.toString());
 
         if(stringBuilder.length() > 0 ) {
             String[] recordsArray = stringBuilder.toString().split(AppUtils.lineSeparator());
@@ -73,7 +73,7 @@ class FileManager {
                     Record record = new Record(item, time);
                     records.add(record);
                 }catch (NumberFormatException e) {
-                    Log.e(getClass().getSimpleName(), "NFE", e);
+                    //Log.e(getClass().getSimpleName(), "NFE", e);
                 }
             }
         }

@@ -2,6 +2,7 @@ package com.pk.purse.models.adapterdialog;
 
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.widget.EditText;
 
 import com.pk.purse.R;
@@ -28,7 +29,7 @@ public class IncomeDialog extends AbsAdapterDialog implements DialogInterface.On
     public AlertDialog getDialog() {
 
         if (alertDialog == null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(ioManager.getContext(), R.style.AppTheme);
+            AlertDialog.Builder builder = new AlertDialog.Builder(ioManager.getContext(), R.style.AlertDialogStyle);
 
             builder.setView(getLayoutId());
             builder.setTitle("Income");
@@ -51,6 +52,11 @@ public class IncomeDialog extends AbsAdapterDialog implements DialogInterface.On
         AlertDialog alert = (AlertDialog) dialog;
 
         EditText incomeAmount = (EditText) alert.findViewById(R.id.edittext_incomeamount);
+
+        if (TextUtils.isEmpty(incomeAmount != null ? incomeAmount.getText() : null)) {
+            dialog.dismiss();
+            return;
+        }
 
         ioManager.update(new IncomeItem(new BigDecimal(incomeAmount.getText().toString())));
 

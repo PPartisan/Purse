@@ -8,6 +8,7 @@ import com.pk.purse.models.Record;
 import com.pk.purse.models.item.Item;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Created by tom on 27/05/16.
@@ -66,6 +67,10 @@ public final class IOManager {
         }
 
         return savedMoney;
+    }
+
+    public List<Record> getRecords() {
+        return fileManager.getMoneyRecorder().getRecords();
     }
 
 }

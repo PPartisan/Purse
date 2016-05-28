@@ -7,7 +7,7 @@ import java.math.BigDecimal;
  */
 public class IncomeItem implements Item {
 
-    private static final String INCOME_ITEM_NAME = "income_item";
+    public static final String INCOME_ITEM_NAME = "Income";
 
     private final BigDecimal value;
 

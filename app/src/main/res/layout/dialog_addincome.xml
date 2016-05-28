@@ -3,12 +3,20 @@
     android:orientation="vertical"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
-    <EditText
-        android:id="@+id/edittext_incomeamount"
+
+    <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:inputType="numberDecimal"
-        android:hint="Income's amount">
-    </EditText>
+        android:layout_height="wrap_content">
+
+        <EditText
+            android:id="@+id/edittext_incomeamount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/activity_horizontal_margin"
+            android:layout_marginStart="@dimen/activity_horizontal_margin"
+            android:inputType="numberDecimal"
+            android:hint="Income's amount"/>
+
+    </android.support.design.widget.TextInputLayout>
 
 </LinearLayout>

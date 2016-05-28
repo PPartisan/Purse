@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.pk.purse.adapter.IOManager;
+import com.pk.purse.models.adapterdialog.ViewRecordsDialog;
 
 /**
  * Created by tom on 27/05/16.
@@ -16,6 +17,7 @@ public final class ViewRecordsAdapterCell extends AbsAdapterCell {
 
     @Override
     public void onClick(IOManager ioManager) {
+        new ViewRecordsDialog(ioManager).getDialog().show();
         Log.e(getClass().getSimpleName(), getClass().getSimpleName() + " clicked");
     }
 }

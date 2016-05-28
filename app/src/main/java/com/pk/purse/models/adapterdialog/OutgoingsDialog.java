@@ -2,6 +2,8 @@ package com.pk.purse.models.adapterdialog;
 
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.pk.purse.R;
@@ -27,9 +29,7 @@ public class OutgoingsDialog extends AbsAdapterDialog implements DialogInterface
 
         if (alertDialog == null) {
 
-            //LayoutInflater inflater = LayoutInflater.from(context);
-            //final View view = inflater.inflate(getLayoutId(), null);
-            AlertDialog.Builder builder = new AlertDialog.Builder(ioManager.getContext(), R.style.AppTheme);
+            AlertDialog.Builder builder = new AlertDialog.Builder(ioManager.getContext(), R.style.AlertDialogStyle);
 
             builder.setView(getLayoutId());
             builder.setTitle("Outgoings");
@@ -55,8 +55,15 @@ public class OutgoingsDialog extends AbsAdapterDialog implements DialogInterface
         EditText itemQuantity = (EditText) alert.findViewById(R.id.edittext_itemquantity);
         EditText pricePerItem = (EditText) alert.findViewById(R.id.edittext_priceperitem);
 
-        final String name = itemName != null ? itemName.getText().toString() : null;
-        final int quantity = Integer.parseInt(itemQuantity != null ? itemQuantity.getText().toString() : null);
+        if (TextUtils.isEmpty(itemName.getText()) ||
+                TextUtils.isEmpty(itemQuantity.getText()) ||
+                TextUtils.isEmpty(pricePerItem.getText())) {
+            dialog.dismiss();
+            return;
+        }
+
+        final String name = itemName.getText().toString();
+        final int quantity = Integer.parseInt(itemQuantity != null ? itemQuantity.getText().toString() : "0");
         final String price = pricePerItem != null ? pricePerItem.getText().toString() : null;
 
         ioManager.update(new OutgoingItem(name, price, quantity));
