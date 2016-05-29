@@ -1,11 +1,12 @@
 package com.pk.purse.adapter;
 
 import android.content.Context;
-import android.preference.PreferenceManager;
 
-import com.pk.purse.models.MoneyRecorder;
+import com.pk.purse.events.UpdatePurseEvent;
 import com.pk.purse.models.Record;
 import com.pk.purse.models.item.Item;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -15,26 +16,15 @@ import java.util.List;
  */
 public final class IOManager {
 
-    public static final String FILE = "file_key";
-    public static final String PREFS = "shared_prefs_key";
+    private static final String TAG = IOManager.class.getSimpleName();
 
-    private final SharedPreferencesManager sharedPreferencesManager;
-    private final FileManager fileManager;
+    private final RecordManager recordManager;
 
     private Context context;
 
     public IOManager(Context context) {
         this.context = context;
-        this.sharedPreferencesManager = new SharedPreferencesManager(PreferenceManager.getDefaultSharedPreferences(context));
-        this.fileManager = new FileManager(context);
-    }
-
-    public FileManager getFileManager() {
-        return fileManager;
-    }
-
-    public SharedPreferencesManager getSharedPreferencesManager() {
-        return sharedPreferencesManager;
+        recordManager = new PurseAbsRecordManager(context);
     }
 
     public Context getContext() {
@@ -42,35 +32,31 @@ public final class IOManager {
     }
 
     public void update(Item item) {
-
-        MoneyRecorder recorder = fileManager.getMoneyRecorder();
-        recorder.addRecord(new Record(item));
-
-        fileManager.writeRecords();
-        sharedPreferencesManager.writeSavedMoney(fileManager.getMoneyRecorder().getSavedMoney().toPlainString());
+        recordManager.addRecord(new Record(item));
+        EventBus.getDefault().post(new UpdatePurseEvent(getRecords()));
     }
 
-    public BigDecimal getSavedMoney(String key) {
-
-        BigDecimal savedMoney;
-
-        switch (key) {
-            case FILE:
-                savedMoney = fileManager.getMoneyRecorder().getSavedMoney();
-                break;
-            case PREFS:
-                savedMoney = sharedPreferencesManager.getSavedMoney();
-                break;
-            default:
-                throw new IllegalArgumentException("key value must match constant in "
-                        + this.getClass().getCanonicalName());
-        }
-
-        return savedMoney;
+    public BigDecimal getSavedMoney() {
+        return recordManager.getSavedMoney();
     }
 
     public List<Record> getRecords() {
-        return fileManager.getMoneyRecorder().getRecords();
+        return recordManager.getRecords();
+    }
+
+    class PurseAbsRecordManager extends AbsRecordManager {
+
+        public PurseAbsRecordManager(Context context) {
+            super(context);
+        }
+
+        @Override
+        public void onRecordsLoaded(List<Record> records) {
+            //Update UI
+            recordManager.setRecords(records);
+            EventBus.getDefault().post(new UpdatePurseEvent(records));
+        }
+
     }
 
 }

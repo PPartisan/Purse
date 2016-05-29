@@ -7,12 +7,7 @@ import android.widget.EditText;
 
 import com.pk.purse.R;
 import com.pk.purse.adapter.IOManager;
-import com.pk.purse.events.UpdatePurseEvent;
-import com.pk.purse.models.MoneyRecorder;
-import com.pk.purse.models.Record;
 import com.pk.purse.models.item.IncomeItem;
-
-import org.greenrobot.eventbus.EventBus;
 
 import java.math.BigDecimal;
 
@@ -59,8 +54,6 @@ public class IncomeDialog extends AbsAdapterDialog implements DialogInterface.On
         }
 
         ioManager.update(new IncomeItem(new BigDecimal(incomeAmount.getText().toString())));
-
-        EventBus.getDefault().post(new UpdatePurseEvent(ioManager.getSavedMoney(IOManager.FILE)));
 
     }
 }

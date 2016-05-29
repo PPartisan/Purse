@@ -1,7 +1,6 @@
 package com.pk.purse.models.adaptercells;
 
-import android.content.Context;
-import android.util.Log;
+import android.widget.Toast;
 
 import com.pk.purse.adapter.IOManager;
 
@@ -16,7 +15,6 @@ public class SetWishItemAdapterCell extends AbsAdapterCell {
 
     @Override
     public void onClick(IOManager ioManager) {
-        //wish item dialog
-        Log.e(getClass().getSimpleName(), getClass().getSimpleName() + " clicked");
+        Toast.makeText(ioManager.getContext(), getClass().getSimpleName() + " clicked", Toast.LENGTH_SHORT).show();
     }
 }

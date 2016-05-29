@@ -12,4 +12,26 @@ public interface Item {
     int getQuantity();
     String getName();
 
+    class Factory {
+
+        private Factory() { throw new AssertionError(); }
+
+        public static Item getItemInstance(String name, String price, int quantity) {
+
+            Item item;
+
+            switch (name) {
+                case IncomeItem.INCOME_ITEM_NAME:
+                    item = new IncomeItem(new BigDecimal(price));
+                    break;
+                default:
+                    item = new OutgoingItem(name, price, quantity);
+            }
+
+            return item;
+
+        }
+
+    }
+
 }

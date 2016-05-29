@@ -11,8 +11,8 @@ import android.widget.TextView;
 import com.pk.purse.R;
 import com.pk.purse.models.Record;
 import com.pk.purse.models.item.IncomeItem;
+import com.pk.purse.utils.ItemUtils;
 
-import java.math.BigDecimal;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.List;
@@ -42,10 +42,10 @@ public class ViewRecordsAdapter extends RecyclerView.Adapter<ViewRecordsAdapter.
 
         Log.e(getClass().getSimpleName(), "in On Bind VH");
 
+        final double value = ItemUtils.getTotalPriceOfItem(records.get(position).getItem()).doubleValue();
+
         holder.name.setText(records.get(position).getItem().getName());
-        Log.e(getClass().getSimpleName(), holder.name.getText().toString());
-        //holder.quantity.setText(records.get(position).getItem().getQuantity());
-        holder.price.setText(NumberFormat.getCurrencyInstance().format(records.get(position).getItem().getPrice().doubleValue()));
+        holder.price.setText(NumberFormat.getCurrencyInstance().format(value));
         holder.date.setText(format.format(records.get(position).getTime()));
 
         if (records.get(position).getItem().getName().equals(IncomeItem.INCOME_ITEM_NAME)) {
@@ -62,13 +62,12 @@ public class ViewRecordsAdapter extends RecyclerView.Adapter<ViewRecordsAdapter.
 
     static class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView name, quantity, price, date;
+        TextView name, price, date;
 
         public ViewHolder(View itemView) {
             super(itemView);
 
             name = (TextView) itemView.findViewById(R.id.rvr_title);
-            quantity = (TextView) itemView.findViewById(R.id.rvr_quantity);
             price = (TextView) itemView.findViewById(R.id.rvr_price);
             date = (TextView) itemView.findViewById(R.id.rvr_date);
 

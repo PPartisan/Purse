@@ -3,17 +3,11 @@ package com.pk.purse.models.adapterdialog;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.EditText;
 
 import com.pk.purse.R;
 import com.pk.purse.adapter.IOManager;
-import com.pk.purse.events.UpdatePurseEvent;
-import com.pk.purse.models.MoneyRecorder;
-import com.pk.purse.models.Record;
 import com.pk.purse.models.item.OutgoingItem;
-
-import org.greenrobot.eventbus.EventBus;
 
 /**
  * Created by tom on 27/05/16.
@@ -68,7 +62,7 @@ public class OutgoingsDialog extends AbsAdapterDialog implements DialogInterface
 
         ioManager.update(new OutgoingItem(name, price, quantity));
 
-        EventBus.getDefault().post(new UpdatePurseEvent(ioManager.getSavedMoney(IOManager.FILE)));
+        //EventBus.getDefault().post(new UpdatePurseEvent(ioManager.getRecords()));
 
     }
 }

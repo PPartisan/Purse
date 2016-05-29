@@ -1,14 +1,9 @@
 package com.pk.purse.activities;
 
-import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.pk.purse.R;
@@ -17,8 +12,6 @@ import com.pk.purse.adapter.IOManager;
 import com.pk.purse.adapter.RecordAdapter;
 import com.pk.purse.events.RecordAdapterClickEvent;
 import com.pk.purse.events.UpdatePurseEvent;
-import com.pk.purse.models.MoneyRecorder;
-import com.pk.purse.models.Record;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -76,33 +69,9 @@ public class MainMenuAct extends AppCompatActivity {
     }
 
     private String savedMoneyText() {
-        final double savedMoney = ioManager.getSavedMoney(IOManager.PREFS).doubleValue();
+        final double savedMoney = ioManager.getSavedMoney().doubleValue();
         return getString(R.string.mma_your_purse, (NumberFormat.getCurrencyInstance().format(savedMoney)));
     }
-
-    private Dialog createSetWishedItemDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-        final View dialogView = this.getLayoutInflater().inflate(R.layout.dialog_setwisheditem, null);
-
-        builder.setTitle("Set Wished Item")
-                .setView(dialogView)
-                .setPositiveButton("Confirm", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-
-                    }
-                });
-
-        return builder.create();
-    }
-
 
 
 }

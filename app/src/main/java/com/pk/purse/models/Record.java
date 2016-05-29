@@ -8,7 +8,7 @@ import java.util.Locale;
 
 public class Record {
 
-    public static final String PIPE = "|";
+    public static final String COMMA = ",";
 
     private Item item;
     private Date time;
@@ -29,7 +29,7 @@ public class Record {
     @Override
     public String toString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        return item.getName() + PIPE + item.getPrice() + PIPE +
-                item.getQuantity() + PIPE + dateFormat.format(time);
+        return item.getName() + COMMA + item.getPrice() + COMMA +
+                item.getQuantity() + COMMA + dateFormat.format(time);
     }
 }

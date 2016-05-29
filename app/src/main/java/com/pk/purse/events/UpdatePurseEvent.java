@@ -1,16 +1,18 @@
 package com.pk.purse.events;
 
-import java.math.BigDecimal;
+import com.pk.purse.models.Record;
+
+import java.util.List;
 
 /**
  * Created by tom on 27/05/16.
  */
 public class UpdatePurseEvent {
 
-    public BigDecimal purse;
+    public List<Record> records;
 
-    public UpdatePurseEvent(BigDecimal purse) {
-        this.purse = purse;
+    public UpdatePurseEvent(List<Record> records) {
+        this.records = records;
     }
 
 }
