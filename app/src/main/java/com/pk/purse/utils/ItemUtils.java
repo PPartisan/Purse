@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 /**
  * Created by tom on 29/05/16.
  */
-public class ItemUtils {
+public final class ItemUtils {
 
     private ItemUtils() { throw new AssertionError(); }
 
