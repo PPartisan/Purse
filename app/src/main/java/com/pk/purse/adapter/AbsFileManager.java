@@ -99,7 +99,7 @@ abstract class AbsFileManager implements FileManager{
                         Item item = Item.Factory.getItemInstance(itemName, String.valueOf(price), quantity);
                         Record record = new Record(item, time);
                         records.add(record);
-                    }catch (NumberFormatException e) {
+                    }catch (NumberFormatException | IndexOutOfBoundsException e) {
                         Log.e(getClass().getSimpleName(), "NFE", e);
                     }
                 }
