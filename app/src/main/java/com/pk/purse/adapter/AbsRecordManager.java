@@ -33,15 +33,13 @@ abstract class AbsRecordManager implements RecordManager {
     @Override
     public void setRecords(List<Record> records) {
         this.records = records;
+        savedMoney = findSavedMoney(this.records);
+        AbsRecordManager.this.fileManager.writeRecords(records);
     }
 
     @Override
     public List<Record> getRecords() {
         fileManager.readRecords();
-        Log.e(TAG, String.valueOf(records.size()));
-        for (Record record : records) {
-            Log.e(TAG, record.toString());
-        }
         return records;
     }
 
@@ -52,6 +50,14 @@ abstract class AbsRecordManager implements RecordManager {
             fileManager.readRecords();
         }
         return savedMoney;
+    }
+
+    @Override
+    public void clearAll() {
+        Log.e(TAG, "CLEARING RECORDS");
+        records.clear();
+        savedMoney = findSavedMoney(records);
+        AbsRecordManager.this.fileManager.writeRecords(records);
     }
 
     private static BigDecimal findSavedMoney(List<Record> records) {

@@ -15,6 +15,7 @@ public interface RecordManager {
     BigDecimal getSavedMoney();
     void addRecord(Record record);
     void setRecords(List<Record> records);
+    void clearAll();
     List<Record> getRecords();
 
 

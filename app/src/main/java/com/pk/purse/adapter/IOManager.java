@@ -44,6 +44,12 @@ public final class IOManager {
         return recordManager.getRecords();
     }
 
+    public void clearRecords() { recordManager.clearAll(); }
+
+    public void setRecords(List<Record> records) {
+        recordManager.setRecords(records);
+    }
+
     class PurseAbsRecordManager extends AbsRecordManager {
 
         public PurseAbsRecordManager(Context context) {

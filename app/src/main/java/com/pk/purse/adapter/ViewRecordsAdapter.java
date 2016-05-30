@@ -2,7 +2,6 @@ package com.pk.purse.adapter;
 
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,8 +38,6 @@ public class ViewRecordsAdapter extends RecyclerView.Adapter<ViewRecordsAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-
-        Log.e(getClass().getSimpleName(), "in On Bind VH");
 
         final double value = ItemUtils.getTotalPriceOfItem(records.get(position).getItem()).doubleValue();
 

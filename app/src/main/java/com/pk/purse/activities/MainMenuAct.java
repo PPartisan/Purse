@@ -1,9 +1,13 @@
 package com.pk.purse.activities;
 
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.pk.purse.R;
@@ -12,13 +16,14 @@ import com.pk.purse.adapter.IOManager;
 import com.pk.purse.adapter.RecordAdapter;
 import com.pk.purse.events.RecordAdapterClickEvent;
 import com.pk.purse.events.UpdatePurseEvent;
+import com.pk.purse.widget.ClearRecordsSnackBar;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
 import java.text.NumberFormat;
 
-public class MainMenuAct extends AppCompatActivity {
+public class MainMenuAct extends AppCompatActivity implements View.OnClickListener {
 
     private AdapterCellManager adapterCellManager;
     private IOManager ioManager;
@@ -35,6 +40,13 @@ public class MainMenuAct extends AppCompatActivity {
 
         savedMoneyTextView = (TextView) findViewById(R.id.savedmoney_tv);
         savedMoneyTextView.setText(savedMoneyText());
+
+        final int colorRed = ContextCompat.getColor(this, R.color.adapter_red);
+        ImageButton clearRecordsBtn = (ImageButton) findViewById(R.id.amm_clear_records_btn);
+        if (clearRecordsBtn == null) { throw new NullPointerException(); }
+        clearRecordsBtn.setColorFilter(colorRed, PorterDuff.Mode.MULTIPLY);
+        clearRecordsBtn.setOnClickListener(this);
+
 
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.menu_rv);
 
@@ -73,5 +85,10 @@ public class MainMenuAct extends AppCompatActivity {
         return getString(R.string.mma_your_purse, (NumberFormat.getCurrencyInstance().format(savedMoney)));
     }
 
+
+    @Override
+    public void onClick(View v) {
+        ClearRecordsSnackBar.make(this, ioManager).show();
+    }
 
 }
